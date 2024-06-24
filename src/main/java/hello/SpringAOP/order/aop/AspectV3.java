@@ -30,7 +30,7 @@ public class AspectV3 {
 
 
     // 자체적으로 Advisor 변환되어, 어드바이저를 추가한다.
-    @Around("allOrderDomain() && allService()")
+    @Around("allService()")
     public Object transaction(ProceedingJoinPoint joinPoint) throws Throwable {
         Signature signature = joinPoint.getSignature();
         Object result = null;
@@ -54,6 +54,7 @@ public class AspectV3 {
         Signature signature = joinPoint.getSignature();
         log.info("[LogTrace start] {}", signature);
         Object proceed = joinPoint.proceed();
+        log.info("[LogTrace end] {}", signature);
 
         return proceed;
     }

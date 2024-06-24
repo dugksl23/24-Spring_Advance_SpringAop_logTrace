@@ -14,7 +14,7 @@ public class AspectV4Pointcut {
 
 
     // 자체적으로 Advisor 변환되어, 어드바이저를 추가한다.
-    @Around("hello.SpringAOP.order.aop.pointcut.Pointcuts.allService()")
+    @Around("hello.SpringAOP.order.aop.pointcut.Pointcuts.allOrderAndAllService()")
     public Object transaction(ProceedingJoinPoint joinPoint) throws Throwable {
         Signature signature = joinPoint.getSignature();
         Object result = null;
@@ -33,11 +33,12 @@ public class AspectV4Pointcut {
     }
 
     // hello.app.order 패키지와 하위 패키지를 포함하면서 적용 패턴이 *Service 에 적용
-    @Around("hello.SpringAOP.order.aop.pointcut.Pointcuts.allOrderAndAllService()")
+    @Around("hello.SpringAOP.order.aop.pointcut.Pointcuts.allOrderDomain()")
     public Object logTraceV2(ProceedingJoinPoint joinPoint) throws Throwable {
         Signature signature = joinPoint.getSignature();
         log.info("[LogTrace start] {}", signature);
         Object proceed = joinPoint.proceed();
+        log.info("[LogTrace end] {}", signature);
 
         return proceed;
     }
