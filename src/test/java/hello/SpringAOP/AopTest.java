@@ -4,6 +4,8 @@ package hello.SpringAOP;
 import hello.SpringAOP.order.OrderRepository;
 import hello.SpringAOP.order.OrderService;
 import hello.SpringAOP.order.aop.AspectV1;
+import hello.SpringAOP.order.aop.AspectV2;
+import hello.SpringAOP.order.aop.AspectV3;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,7 +16,7 @@ import org.springframework.context.annotation.Import;
 
 @Slf4j
 @SpringBootTest
-@Import(AspectV1.class)
+@Import(AspectV3.class)
 // @Import 어노테이션 자체가 @Bean 스프링 빈으로 등록하는 과정까지 자동화한다.
 public class AopTest {
 
