@@ -3,7 +3,7 @@ package hello.SpringAOP;
 
 import hello.SpringAOP.order.OrderRepository;
 import hello.SpringAOP.order.OrderService;
-import hello.SpringAOP.order.aop.AspectV4Pointcut;
+import hello.SpringAOP.order.aop.AspectV6Advice;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Import;
 
 @Slf4j
 @SpringBootTest
-//@Import({AspectV5Order.class})
+@Import({AspectV6Advice.class})
 //@Import({AspectV4Pointcut.class})
 public class AopTest {
 
