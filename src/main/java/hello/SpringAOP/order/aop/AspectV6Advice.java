@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Import;
 @Aspect
 public class AspectV6Advice {
 
-//    @Around("hello.SpringAOP.order.aop.pointcut.Pointcuts.allOrderAndAllService()")
+    @Around("hello.SpringAOP.order.aop.pointcut.Pointcuts.allOrderAndAllService()")
     public Object transaction(ProceedingJoinPoint joinPoint) throws Throwable {
 
         try {
