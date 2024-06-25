@@ -20,11 +20,13 @@ public class ExecutionTest {
 
     AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
     Method helloMethod;
+    Method internalMethod;
 
     @BeforeEach
     public void init() throws NoSuchMethodException {
         // 파라미터를 전달.
         helloMethod = MemberServiceImpl.class.getMethod("hello", String.class);
+        internalMethod = MemberServiceImpl.class.getMethod("internalMethod", String.class);
 
     }
 
@@ -77,10 +79,8 @@ public class ExecutionTest {
     @Test
     @DisplayName("포인트컷 실행 조건 선언 타입 매치")
     void classMatchPointcut() {
-        // 예외 생략
-        String pointcutSignature = "execution(* MemberService.hello(..))";
+        String pointcutSignature = "execution(* hello(String))";
         pointcut.setExpression(pointcutSignature);
-        // assertJ 쓰는 것을 권장한다.
         assertThat(pointcut.matches(helloMethod, MemberService.class)).isTrue();
         log.info("Pointcut Match : {}", pointcut.matches(helloMethod, MemberService.class));
 
@@ -163,14 +163,8 @@ public class ExecutionTest {
     @Test
     @DisplayName("포인트컷 실행 조건 / 현재 패키지와 그 하위 패키지 모두 포함(클래스와 메서드까지)")
     void packageNameMatchPointcut_subPackageV1() {
-        // 예외 생략
         String pointcutSignature = "execution(* hello..*(..))";
-        // 접근 제어자, 반환타입, 선언 타입, 파라미터, 예외 순서대로 생략이 가능하다.
-        // 생략은 * 을 통해 생략이 가능하다.
-        // hello.. hello 현재 패키를 포함한 그 하위 패키지 전부라는 뜻이다.
-        // *(..) 포인트컷 적용 시점이 메서드 실행 시점이기에 메서드는 생략 불가하며, 반드시 포함해야 한다.
         pointcut.setExpression(pointcutSignature);
-        // assertJ 쓰는 것을 권장한다.
         assertThat(pointcut.matches(helloMethod, MemberService.class)).isTrue();
         log.info("Pointcut Match : {}", pointcut.matches(helloMethod, MemberService.class));
 
@@ -179,16 +173,113 @@ public class ExecutionTest {
     @Test
     @DisplayName("포인트컷 실행 조건 / 현재 패키지와 그 하위 패키지 모두 포함(클래스와 메서드까지)")
     void packageNameMatchPointcut_subPackageV2() {
-        // 예외 생략
         String pointcutSignature = "execution(* hello.SpringAOP..*.*(..))";
-        // 접근 제어자, 반환타입, 선언 타입, 파라미터, 예외 순서대로 생략이 가능하다.
-        // 생략은 * 을 통해 생략이 가능하다.
-        // hello.. hello 현재 패키를 포함한 그 하위 패키지 전부라는 뜻이다.
-        // *(..) 포인트컷 적용 시점이 메서드 실행 시점이기에 메서드는 생략 불가하며, 반드시 포함해야 한다.
         pointcut.setExpression(pointcutSignature);
-        // assertJ 쓰는 것을 권장한다.
         assertThat(pointcut.matches(helloMethod, MemberService.class)).isTrue();
         log.info("Pointcut Match : {}", pointcut.matches(helloMethod, MemberService.class));
+
+    }
+
+    @Test
+    @DisplayName("타입 매칭 : 부모 타입 허용")
+    void typeMatchSuperTypePointcut() {
+        String pointcutSignature = "execution(* hello.SpringAOP.member.MemberService.*(..))";
+        pointcut.setExpression(pointcutSignature);
+        assertThat(pointcut.matches(helloMethod, MemberService.class)).isTrue();
+        log.info("Pointcut Match : {}", pointcut.matches(helloMethod, MemberService.class));
+
+    }
+
+    @Test
+    @DisplayName("타입 매칭 : 자식 클래스 메서드 v1")
+    void typeMatchInternalPointcut_v1() {
+
+        String pointcutSignature = "execution(* hello.SpringAOP.member.MemberService.*(..))";
+        pointcut.setExpression(pointcutSignature);
+
+        assertThat(pointcut.matches(internalMethod, MemberService.class)).isFalse();
+        log.info("Pointcut Match : {}", pointcut.matches(internalMethod, MemberService.class));
+
+    }
+
+    @Test
+    @DisplayName("타입 매칭 : 자식 클래스 메서드 v2")
+    void typeMatchInternalPointcut_v2() {
+
+        String pointcutSignature = "execution(* hello.SpringAOP.member.MemberServiceImpl.*(..))";
+        pointcut.setExpression(pointcutSignature);
+
+        assertThat(pointcut.matches(internalMethod, MemberService.class)).isTrue();
+        log.info("Pointcut Match : {}", pointcut.matches(internalMethod, MemberService.class));
+
+    }
+
+    // ===　파라미터 매칭
+
+    @Test
+    @DisplayName("파라미터 타입 매칭 : String")
+    // (String)
+    void argsMatchPointcut_String() {
+
+        String pointcutSignature = "execution(* hello.SpringAOP.member.MemberService.*(String))";
+        pointcut.setExpression(pointcutSignature);
+        assertThat(pointcut.matches(helloMethod, MemberService.class)).isTrue();
+
+    }
+
+    @Test
+    @DisplayName("파라미터 타입 매칭 : 파라미터 없음")
+    // ()
+    void argsMatchPointcut_NoArgs() {
+
+        String pointcutSignature = "execution(* hello.SpringAOP.member.MemberService.*())";
+        pointcut.setExpression(pointcutSignature);
+        assertThat(pointcut.matches(helloMethod, MemberService.class)).isFalse();
+
+    }
+
+    @Test
+    @DisplayName("파라미터 타입 매칭 : 정확히 하나의 파라미터만 허용 및 모든 타입 허용")
+    // (x)
+    void argsMatchPointcut_Star() {
+
+        String pointcutSignature = "execution(* *(*))";
+        pointcut.setExpression(pointcutSignature);
+        assertThat(pointcut.matches(helloMethod, MemberService.class)).isTrue();
+
+    }
+
+    @Test
+    @DisplayName("파라미터 타입 매칭 : 숫자와 무관하게 모든 파라미터 허용")
+    // (), (xxx), (xxx, xxx)
+    void argsMatchAllPointcut() {
+
+        String pointcutSignature = "execution(* *(..))";
+        pointcut.setExpression(pointcutSignature);
+        assertThat(pointcut.matches(helloMethod, MemberService.class)).isTrue();
+
+    }
+
+    @Test
+    @DisplayName("파라미터 타입 매칭 : String 타입으로 시작하고, 숫자와 무관하게 모든 타입 허용")
+    // (String), (String, xxx), (String, xxx, xxx)
+    void argsMatchComplexPointcut_V1() {
+
+        String pointcutSignature = "execution(* *(String, ..))";
+        pointcut.setExpression(pointcutSignature);
+        assertThat(pointcut.matches(helloMethod, MemberService.class)).isTrue();
+
+    }
+
+    @Test
+    @DisplayName("파라미터 타입 매칭 : 파라미터가 2개이며, String 타입으로 시작하고, 두번째는 모든 타입 허용")
+        // (String, xxx)
+    void argsMatchComplexPointcut_V2() {
+
+        String pointcutSignature = "execution(* *(String, ..))";
+        String pointcutSignature2 = "execution(* *(String, *))";
+        pointcut.setExpression(pointcutSignature);
+        assertThat(pointcut.matches(helloMethod, MemberService.class)).isTrue();
 
     }
 

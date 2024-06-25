@@ -18,7 +18,7 @@ public class MemberServiceImpl implements MemberService {
         return name;
     }
 
-    public String internalMethod() {
+    public String internalMethod(String name) {
         log.info("internalMethod");
         return "internalMethod";
     }
