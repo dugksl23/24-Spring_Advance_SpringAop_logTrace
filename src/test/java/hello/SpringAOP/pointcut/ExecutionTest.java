@@ -228,66 +228,10 @@ public class ExecutionTest {
 
     @Test
     @DisplayName("파라미터 타입 매칭 : String")
-    // (String)
+        // (String)
     void argsMatchPointcut_String() {
 
-        String pointcutSignature = "execution(* hello.SpringAOP.member.MemberService.*(String))";
-        pointcut.setExpression(pointcutSignature);
-        assertThat(pointcut.matches(helloMethod, MemberService.class)).isTrue();
-
-    }
-
-    @Test
-    @DisplayName("파라미터 타입 매칭 : 파라미터 없음")
-    // ()
-    void argsMatchPointcut_NoArgs() {
-
-        String pointcutSignature = "execution(* hello.SpringAOP.member.MemberService.*())";
-        pointcut.setExpression(pointcutSignature);
-        assertThat(pointcut.matches(helloMethod, MemberService.class)).isFalse();
-
-    }
-
-    @Test
-    @DisplayName("파라미터 타입 매칭 : 정확히 하나의 파라미터만 허용 및 모든 타입 허용")
-    // (x)
-    void argsMatchPointcut_Star() {
-
-        String pointcutSignature = "execution(* *(*))";
-        pointcut.setExpression(pointcutSignature);
-        assertThat(pointcut.matches(helloMethod, MemberService.class)).isTrue();
-
-    }
-
-    @Test
-    @DisplayName("파라미터 타입 매칭 : 숫자와 무관하게 모든 파라미터 허용")
-    // (), (xxx), (xxx, xxx)
-    void argsMatchAllPointcut() {
-
-        String pointcutSignature = "execution(* *(..))";
-        pointcut.setExpression(pointcutSignature);
-        assertThat(pointcut.matches(helloMethod, MemberService.class)).isTrue();
-
-    }
-
-    @Test
-    @DisplayName("파라미터 타입 매칭 : String 타입으로 시작하고, 숫자와 무관하게 모든 타입 허용")
-    // (String), (String, xxx), (String, xxx, xxx)
-    void argsMatchComplexPointcut_V1() {
-
-        String pointcutSignature = "execution(* *(String, ..))";
-        pointcut.setExpression(pointcutSignature);
-        assertThat(pointcut.matches(helloMethod, MemberService.class)).isTrue();
-
-    }
-
-    @Test
-    @DisplayName("파라미터 타입 매칭 : 파라미터가 2개이며, String 타입으로 시작하고, 두번째는 모든 타입 허용")
-        // (String, xxx)
-    void argsMatchComplexPointcut_V2() {
-
-        String pointcutSignature = "execution(* *(String, ..))";
-        String pointcutSignature2 = "execution(* *(String, *))";
+        String pointcutSignature = "args(String)";
         pointcut.setExpression(pointcutSignature);
         assertThat(pointcut.matches(helloMethod, MemberService.class)).isTrue();
 
