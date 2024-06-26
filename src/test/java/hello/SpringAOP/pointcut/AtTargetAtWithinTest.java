@@ -20,7 +20,7 @@ public class AtTargetAtWithinTest {
 
     @Test
     public void atTargetTest() {
-        log.info("child proxy : {}", child);
+        log.info("child proxy : {}", child.getClass());
         child.childMethod();
         child.parentMethod();
     }
