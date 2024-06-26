@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.lang.reflect.Method;
 
@@ -15,7 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @Slf4j
-@SpringBootTest
 public class ExecutionTest {
 
     AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
@@ -180,6 +178,18 @@ public class ExecutionTest {
 
     }
 
+    // === 타입 매칭 ==
+
+    @Test
+    @DisplayName("타입 매칭 : 본인 타입 허용")
+    void typeExactMatchPointcut() {
+        String pointcutSignature = "execution(* hello.SpringAOP.member.MemberServiceImpl.*(..))";
+        pointcut.setExpression(pointcutSignature);
+        assertThat(pointcut.matches(helloMethod, MemberService.class)).isTrue();
+        log.info("Pointcut Match : {}", pointcut.matches(helloMethod, MemberService.class));
+
+    }
+
     @Test
     @DisplayName("타입 매칭 : 부모 타입 허용")
     void typeMatchSuperTypePointcut() {
@@ -191,25 +201,25 @@ public class ExecutionTest {
     }
 
     @Test
-    @DisplayName("타입 매칭 : 자식 클래스 메서드 v1")
-    void typeMatchInternalPointcut_v1() {
+    @DisplayName("타입 매칭 : 부모 타입에 있는 메서드만 허용 v1")
+    void typeMatchInternalPointcut() {
 
         String pointcutSignature = "execution(* hello.SpringAOP.member.MemberService.*(..))";
         pointcut.setExpression(pointcutSignature);
 
         assertThat(pointcut.matches(internalMethod, MemberService.class)).isFalse();
-        log.info("Pointcut Match : {}", pointcut.matches(internalMethod, MemberService.class));
+        log.info("Pointcut Match : {}", pointcut.matches(helloMethod, MemberService.class));
 
     }
 
     @Test
-    @DisplayName("타입 매칭 : 자식 클래스 메서드 v2")
-    void typeMatchInternalPointcut_v2() {
+    @DisplayName("타입 매칭 : 부모 타입에 있는 메서드만 허용 v2")
+    void typeExactMatchInternalPointcut() {
 
         String pointcutSignature = "execution(* hello.SpringAOP.member.MemberServiceImpl.*(..))";
         pointcut.setExpression(pointcutSignature);
 
-        assertThat(pointcut.matches(internalMethod, MemberService.class)).isTrue();
+        assertThat(pointcut.matches(internalMethod, MemberServiceImpl.class)).isTrue();
         log.info("Pointcut Match : {}", pointcut.matches(internalMethod, MemberService.class));
 
     }
