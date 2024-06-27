@@ -22,7 +22,6 @@ public class AtAnnotationTest {
     @Autowired
     private MemberService memberService;
 
-
     @Test
     public void success(){
         log.info("target Proxy : {}", memberService.getClass());

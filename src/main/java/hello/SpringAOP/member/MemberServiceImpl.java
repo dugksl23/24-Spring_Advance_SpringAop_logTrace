@@ -5,10 +5,11 @@ import hello.SpringAOP.member.annotation.ClassAop;
 import hello.SpringAOP.member.annotation.MethodAop;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @ClassAop
-@Component
+@Service
 public class MemberServiceImpl implements MemberService {
 
     @Override
