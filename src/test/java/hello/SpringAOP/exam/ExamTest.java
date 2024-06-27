@@ -1,9 +1,11 @@
 package hello.SpringAOP.exam;
 
+import hello.SpringAOP.exam.aop.LogTraceAspect;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 
 @SpringBootTest
 @Slf4j
