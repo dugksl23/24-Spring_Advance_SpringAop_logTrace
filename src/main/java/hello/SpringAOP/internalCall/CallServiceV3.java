@@ -1,6 +1,5 @@
 package hello.SpringAOP.internalCall;
 
-import hello.SpringAOP.exam.annotation.Retry;
 import hello.SpringAOP.exam.annotation.Trace;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,19 +11,14 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
-public class CallServiceV2 {
+public class CallServiceV3 {
 
-    private final ApplicationContext applicationContext;
-    private final ObjectProvider<CallServiceV2> callServiceProvider;
-
+    private final CallServiceInternal callServiceInternal;
 
     @Trace
     public void externalCall(){
         log.info("externalCall");
-        // ApplicationContext
-        CallServiceV2 callServiceV2 = (CallServiceV2) applicationContext.getBean("callServiceV2");
-        // CallServiceProvider = 지연조회
-
+        callServiceInternal.internalCall();
     }
 
 }
