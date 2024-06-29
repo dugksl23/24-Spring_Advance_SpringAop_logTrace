@@ -1,5 +1,6 @@
 package hello.SpringAOP.exam;
 
+import hello.SpringAOP.exam.annotation.Retry;
 import hello.SpringAOP.exam.annotation.Trace;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -15,13 +16,15 @@ public class ExamRepository {
     /**
      * 5번에 1번 실패하는 요청
      */
+    @Retry(value = 4)
     @Trace
     public String save(String itemId) {
         sequence++;
-        if (sequence % 5 == 0) {
-            throw new IllegalArgumentException("요청 실패 " + itemId);
-        }
         log.info("sequence : {}", sequence);
+        if (sequence % 5 == 0) {
+            throw new IllegalArgumentException("실패 " + itemId);
+        }
+
         return "okay";
     }
 

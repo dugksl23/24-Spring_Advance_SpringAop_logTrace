@@ -1,11 +1,9 @@
 package hello.SpringAOP.exam;
 
-import hello.SpringAOP.exam.aop.LogTraceAspect;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 
 @SpringBootTest
 @Slf4j
@@ -18,8 +16,9 @@ public class ExamTest {
     @Test
     public void test() {
 
-        for (int i = 0; i <= 5; i++) {
-            examService.orderItem("요청" + i);
+        for (int i = 1; i <= 5; i++) {
+            String s = examService.orderItem("요청 " + i);
+            log.info("응답 : {}", s);
         }
 
     }
