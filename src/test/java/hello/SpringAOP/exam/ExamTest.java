@@ -12,7 +12,6 @@ public class ExamTest {
     @Autowired
     private ExamService examService;
 
-
     @Test
     public void test() {
 
