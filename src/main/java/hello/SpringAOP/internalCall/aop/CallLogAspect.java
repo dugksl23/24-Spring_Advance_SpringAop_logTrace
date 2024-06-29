@@ -18,12 +18,6 @@ public class CallLogAspect {
     @Pointcut("@annotation(hello.SpringAOP.exam.annotation.Trace)")
     public void tracePointCut() {}
 
-
-//    @Before("execution(* hello.SpringAOP.internalCall..*(..))")
-    public void before(JoinPoint joinPoint) {
-        log.info("aop = {}", joinPoint.getSignature());
-    }
-
     @Around("tracePointCut()")
     public Object doTrace(ProceedingJoinPoint joinPoint) throws Throwable {
         log.info("CallLogAspect AOP = {}", joinPoint.getSignature());
